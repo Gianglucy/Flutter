@@ -1,7 +1,9 @@
+import 'package:DemoUI/resources/colors.dart';
+import 'package:DemoUI/resources/images.dart';
+import 'package:DemoUI/resources/styles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/widgets.dart';
-import 'extend/extendColor.dart';
 import 'package:flutter_tags/flutter_tags.dart';
 
 class MatchingCandidatePage extends StatefulWidget {
@@ -17,6 +19,54 @@ class MatchingCandidatePage extends StatefulWidget {
 }
 
 class _MatchingCandidatePageState extends State<MatchingCandidatePage> {
+  @override
+  Widget build(BuildContext context) {
+    Size _screenSize = MediaQuery.of(context).size;
+    // TODO: implement build
+    return Scaffold(
+        backgroundColor: Colors.white,
+        appBar: AppBar(
+          title: Text(widget.title, style: AppStyles.blackBold(20)),
+          leading: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Stack(
+              children: [
+                ClipRRect(
+                  borderRadius:
+                      BorderRadius.all(Radius.circular(_screenSize.width / 2)),
+                  child: Image.asset(AppImages.corgi,
+                      height: 50, width: 50, fit: BoxFit.fitWidth),
+                ),
+                Positioned(
+                  // draw a red marble
+                  top: -1,
+                  right: -1,
+                  child: new Icon(Icons.brightness_1,
+                      size: 15, color: Colors.redAccent),
+                )
+              ],
+            ),
+          ),
+          actions: [
+            IconButton(
+              icon: Icon(
+                Icons.settings,
+                color: Colors.grey,
+              ),
+              onPressed: () {
+                print("====SETTING====");
+              },
+            ),
+          ],
+        ),
+        body: Column(
+          children: [
+            _page(),
+            _infoCandidate(),
+          ],
+        ));
+  }
+
   Widget _spaceWidthBox(double space) {
     return SizedBox(width: space);
   }
@@ -35,14 +85,31 @@ class _MatchingCandidatePageState extends State<MatchingCandidatePage> {
             size: iconSize,
           ),
         ),
-        TextSpan(
-            text: text,
-            style: TextStyle(
-                color: Colors.grey,
-                fontWeight: FontWeight.bold,
-                fontSize: fontSize,
-                fontFamily: "Hiragino Sans"))
+        TextSpan(text: text, style: AppStyles.greyBold(fontSize))
       ]),
+    );
+  }
+
+  Widget _tagCustom(List<String> items) {
+    return Tags(
+      itemCount: items.length,
+      itemBuilder: (int index) {
+        final item = items[index];
+        return ItemTags(
+          index: index,
+          title: item.toString(),
+          textStyle: AppStyles.primaryBold(14),
+          textActiveColor: AppColors.mainColor,
+          textColor: AppColors.mainColor,
+          elevation: 0,
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 0),
+          borderRadius: BorderRadius.all(Radius.circular(14)),
+          border: Border.all(color: AppColors.mainColor, width: 2),
+          activeColor: AppColors.white,
+          active: false,
+          alignment: MainAxisAlignment.start,
+        );
+      },
     );
   }
 
@@ -56,30 +123,10 @@ class _MatchingCandidatePageState extends State<MatchingCandidatePage> {
       alignment: Alignment.center,
       child: Text(
         "10/10",
-        style: TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: 13,
-            fontFamily: "Hiragino Sans"),
+        style: AppStyles.blackBold(13),
         textAlign: TextAlign.center,
       ),
     );
-  }
-
-  Widget _yellowBox(String name) {
-    Color colorPrimary = HexColor("#fab91d");
-    return Container(
-        decoration: BoxDecoration(
-            border: Border.all(color: colorPrimary, width: 2),
-            borderRadius: BorderRadius.all(Radius.circular(13))),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: Text(name,
-              style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 14,
-                  color: colorPrimary,
-                  fontFamily: "Hiragino Sans")),
-        ));
   }
 
   Widget _userInfoWidget() {
@@ -107,7 +154,7 @@ class _MatchingCandidatePageState extends State<MatchingCandidatePage> {
                         width: _screenSize.width * 0.25,
 //                          fit: BoxFit.cover,
                         image: AssetImage(
-                          "assets/corgi.jpg",
+                          AppImages.corgi,
                         ),
                       ),
                     ),
@@ -123,17 +170,11 @@ class _MatchingCandidatePageState extends State<MatchingCandidatePage> {
                     children: <Widget>[
                       Text(
                         "田中 太郎",
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 20,
-                            fontFamily: "Hiragino Sans"),
+                        style: AppStyles.blackBold(20),
                       ),
                       Text(
                         "経営者 / CEO / 株式会社aaa",
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 14,
-                            fontFamily: "Hiragino Sans"),
+                        style: AppStyles.blackBold(14),
                       ),
                       _richTextCustome(Icons.location_on, 14, "渋谷・東京都", 12),
                       _spaceHeightBox(8),
@@ -148,11 +189,7 @@ class _MatchingCandidatePageState extends State<MatchingCandidatePage> {
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Text(
                 "プログラマーです。\n 私は現在株式会社aaaで代表取締役社長CEOとして社員130人と共に日々事業を拡大し社員と楽しく仕事をしております。元々はサーバーサイドのエンジニアとして株式会社bbbで...",
-                style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 14,
-                    fontFamily: "Hiragino Sans",
-                    color: Colors.grey),
+                style: AppStyles.greyBold(14),
                 maxLines: 3,
                 overflow: TextOverflow.ellipsis,
               ),
@@ -185,39 +222,10 @@ class _MatchingCandidatePageState extends State<MatchingCandidatePage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Text("興味・関心",
-              style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 18,
-                  color: Colors.black,
-                  fontFamily: "Hiragino Sans")),
+          Text("興味・関心", style: AppStyles.blackBold(18)),
           Padding(
             padding: const EdgeInsets.only(top: 8),
-            child: Tags(
-              itemCount: _itemsInteresting.length,
-              itemBuilder: (int index) {
-                final item = _itemsInteresting[index];
-                return ItemTags(
-                  index: index,
-                  title: item.toString(),
-                  textStyle: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 14,
-                      color: HexColor("#fab91d"),
-                      fontFamily: "Hiragino Sans"),
-                  textActiveColor: HexColor("#fab91d"),
-                  textColor: HexColor("#fab91d"),
-                  elevation: 0,
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 16, vertical: 0),
-                  borderRadius: BorderRadius.all(Radius.circular(14)),
-                  border: Border.all(color: HexColor("#fab91d"), width: 2),
-                  activeColor: Colors.white,
-                  active: false,
-                  alignment: MainAxisAlignment.start,
-                );
-              },
-            ),
+            child: _tagCustom(_itemsInteresting),
           )
         ],
       ),
@@ -250,42 +258,13 @@ class _MatchingCandidatePageState extends State<MatchingCandidatePage> {
                     fontFamily: "Hiragino Sans")),
             Padding(
               padding: const EdgeInsets.only(top: 8),
-              child: Tags(
-                itemCount: _itemsSkill.length,
-                itemBuilder: (int index) {
-                  final item = _itemsSkill[index];
-                  return ItemTags(
-                    index: index,
-                    title: item.toString(),
-                    textStyle: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 14,
-                        color: HexColor("#fab91d"),
-                        fontFamily: "Hiragino Sans"),
-                    textActiveColor: HexColor("#fab91d"),
-                    textColor: HexColor("#fab91d"),
-                    elevation: 0,
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 16, vertical: 0),
-                    borderRadius: BorderRadius.all(Radius.circular(14)),
-                    border: Border.all(color: HexColor("#fab91d"), width: 2),
-                    activeColor: Colors.white,
-                    active: false,
-                    alignment: MainAxisAlignment.start,
-                  );
-                },
-              ),
+              child: _tagCustom(_itemsSkill),
             ),
             Expanded(
               flex: 1,
               child: Container(
                 alignment: Alignment.bottomCenter,
-                child: Text("プロフィール詳細を見る",
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 18,
-                        color: HexColor("#fab91d"),
-                        fontFamily: "Hiragino Sans")),
+                child: Text("プロフィール詳細を見る", style: AppStyles.primaryBold(18)),
               ),
             )
           ],
@@ -312,12 +291,7 @@ class _MatchingCandidatePageState extends State<MatchingCandidatePage> {
                       bottom: BorderSide(width: 1, color: Colors.grey))),
               alignment: Alignment.center,
               height: 44,
-              child: Text("興味なし",
-                  style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 13,
-                      color: Colors.black,
-                      fontFamily: "Hiragino Sans")),
+              child: Text("興味なし", style: AppStyles.blackBold(13)),
             ),
           ),
         ),
@@ -335,12 +309,7 @@ class _MatchingCandidatePageState extends State<MatchingCandidatePage> {
                       bottom: BorderSide(width: 1, color: Colors.grey))),
               alignment: Alignment.center,
               height: 44,
-              child: Text("興味あり",
-                  style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 13,
-                      color: Colors.black,
-                      fontFamily: "Hiragino Sans")),
+              child: Text("興味あり", style: AppStyles.blackBold(13)),
             ),
           ),
         )
@@ -358,7 +327,6 @@ class _MatchingCandidatePageState extends State<MatchingCandidatePage> {
               border: Border.all(color: Colors.grey, width: 1),
             ),
             margin: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
-//            color: Colors.yellow,
             child: Column(
               children: [
                 _userInfoWidget(),
@@ -368,58 +336,6 @@ class _MatchingCandidatePageState extends State<MatchingCandidatePage> {
               ],
             ),
           ),
-        ));
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    Size _screenSize = MediaQuery.of(context).size;
-    // TODO: implement build
-    return Scaffold(
-        backgroundColor: Colors.white,
-        appBar: AppBar(
-          title: Text(widget.title,
-              style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 20,
-                  fontFamily: "Hiragino Sans")),
-          leading: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Stack(
-              children: [
-                ClipRRect(
-                  borderRadius:
-                      BorderRadius.all(Radius.circular(_screenSize.width / 2)),
-                  child: Image.asset("assets/corgi.jpg",
-                      height: 50, width: 50, fit: BoxFit.fitWidth),
-                ),
-                Positioned(
-                  // draw a red marble
-                  top: -1,
-                  right: -1,
-                  child: new Icon(Icons.brightness_1,
-                      size: 15, color: Colors.redAccent),
-                )
-              ],
-            ),
-          ),
-          actions: [
-            IconButton(
-              icon: Icon(
-                Icons.settings,
-                color: Colors.grey,
-              ),
-              onPressed: () {
-                print("====SETTING====");
-              },
-            ),
-          ],
-        ),
-        body: Column(
-          children: [
-            _page(),
-            _infoCandidate(),
-          ],
         ));
   }
 }
