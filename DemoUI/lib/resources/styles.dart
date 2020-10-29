@@ -26,10 +26,7 @@ class AppStyles {
   }
 
   static TextStyle blackText(double size) {
-    return TextStyle(
-        fontSize: size,
-        fontFamily: AppFonts.hiragino,
-        fontWeight: FontWeight.bold);
+    return TextStyle(fontSize: size, fontFamily: AppFonts.hiragino);
   }
 
   static TextStyle primaryText(double size) {
@@ -72,6 +69,19 @@ class AppStyles {
   static TextStyle cyantBold(double size) {
     return TextStyle(
         color: AppColors.cyantColor,
+        fontSize: size,
+        fontFamily: AppFonts.hiragino,
+        fontWeight: FontWeight.bold);
+  }
+
+  static TextStyle whiteText(double size) {
+    return TextStyle(
+        color: AppColors.white, fontSize: size, fontFamily: AppFonts.hiragino);
+  }
+
+  static TextStyle whiteBold(double size) {
+    return TextStyle(
+        color: AppColors.white,
         fontSize: size,
         fontFamily: AppFonts.hiragino,
         fontWeight: FontWeight.bold);

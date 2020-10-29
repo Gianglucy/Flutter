@@ -2,13 +2,16 @@ import 'package:DemoUI/resources/colors.dart';
 import 'package:DemoUI/resources/images.dart';
 import 'package:DemoUI/resources/styles.dart';
 import 'package:flutter/painting.dart';
-import 'extend/extendColor.dart';
+import '../../extend/extendColor.dart';
 import 'package:flutter/material.dart';
+import '../comments/comments.dart';
+import '../evaluation/evaluation.dart';
 
 class ProfilePage extends StatefulWidget {
-  ProfilePage({Key key, this.title}) : super(key: key);
+  ProfilePage({Key key, this.title, this.isModal}) : super(key: key);
 
   final String title;
+  bool isModal = false;
 
   @override
   _ProfilePageState createState() => _ProfilePageState();
@@ -19,49 +22,73 @@ class _ProfilePageState extends State<ProfilePage> {
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: Colors.white,
-        appBar: AppBar(
-          title: Text(widget.title, style: AppStyles.blackBold(20)),
-          leading: IconButton(
-            icon: Icon(
-              Icons.arrow_back,
-              color: AppColors.mainColor,
-            ),
-            onPressed: () {
-              print("====BACK====");
-            },
+        appBar: widget.isModal
+            ? null
+            : AppBar(
+                title: Text(widget.title, style: AppStyles.blackBold(20)),
+                leading: IconButton(
+                  icon: Icon(
+                    Icons.arrow_back,
+                    color: AppColors.mainColor,
+                  ),
+                  onPressed: () {
+                    print("====BACK====");
+                  },
+                ),
+              ),
+        body: SingleChildScrollView(
+          child: Column(
+            children: [
+              _buttonCloseModal(),
+              widget.isModal ? _spaceHeightBox(0) : _spaceHeightBox(16),
+              _userInfoWidget(),
+              _spaceHeightBox(16),
+              _options(),
+              _description(),
+              _shortDivider(),
+              _skills(),
+              _shortDivider(),
+              _experience(),
+              _shortDivider(),
+              _educationalBackground(),
+              _shortDivider(),
+              _purposeUse(),
+              _shortDivider()
+//              _count()
+            ],
           ),
-        ),
-        body: Column(
-          children: [
-            _spaceHeightBox(16),
-            _userInfoWidget(),
-            _spaceHeightBox(16),
-            _options(),
-            _description(),
-            _shortDivider(),
-//            _skills(),
-//            _shortDivider(),
-//            _experience(),
-//            _shortDivider(),
-//            _educationalBackground(),
-//            _shortDivider(),
-//            _purposeUse(),
-//            _shortDivider()
-            _count()
-          ],
         ));
   }
 
-  static _starHandle() {
+  _starHandle() {
     print("======STAR======");
   }
 
-  static _smileHandle() {
+  _smileHandle() {
     print("======SMILE======");
+    showModalBottomSheet(
+        context: context,
+        builder: (BuildContext context) {
+          return Container(
+              height: MediaQuery.of(context).size.height * 0.8,
+              child: EvaluationPage(
+                title: "評価",
+              ));
+        },
+        isScrollControlled: true);
   }
 
-  static _chatHandle() {
-    print("======CHAT======");
+  void _commentHandle() {
+    showModalBottomSheet(
+        context: context,
+        builder: (BuildContext context) {
+          return Container(
+              height: MediaQuery.of(context).size.height * 0.8,
+              child: CommentsPage(
+                title: "評価とコメント",
+              ));
+        },
+        isScrollControlled: true);
   }
 
   Widget _spaceWidthBox(double space) {
@@ -89,85 +116,105 @@ class _ProfilePageState extends State<ProfilePage> {
         ));
   }
 
-  Widget _optionChild(String title, IconData icon, Function _doSomeThing) {
+  Widget _optionChild(String title, IconData icon, VoidCallback doSomeThing) {
     const double sizeIcon = 35;
     const double sizeFont = 13;
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: <Widget>[
-        IconButton(
-          icon: Icon(
+    return GestureDetector(
+      onTap: doSomeThing,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: <Widget>[
+          Icon(
             icon,
             color: AppColors.mainColor,
             size: sizeIcon,
           ),
-          onPressed: () {
-            _doSomeThing();
-          },
+          Text(
+            title,
+            style: AppStyles.greyBold(sizeFont),
+          )
+        ],
+      ),
+    );
+  }
+
+  Widget _buttonCloseModal() {
+    return Container(
+      height: widget.isModal ? MediaQuery.of(context).size.height * 0.035 : 0,
+      child: Stack(children: [
+        Positioned(
+          top: 0,
+          right: 0,
+          child: IconButton(
+            onPressed: onCloseModal,
+            icon: Icon(
+              Icons.close,
+            ),
+          ),
         ),
-        Text(
-          title,
-          style: AppStyles.greyBold(sizeFont),
-        )
-      ],
+      ]),
     );
   }
 
   Widget _userInfoWidget() {
     Size _screenSize = MediaQuery.of(context).size;
-    return Row(
-      mainAxisSize: MainAxisSize.max,
-      children: <Widget>[
-        _spaceWidthBox(32),
-        Flexible(
-          flex: 3,
-          fit: FlexFit.tight,
-          child: ClipRRect(
-            borderRadius:
-                BorderRadius.all(Radius.circular(_screenSize.width / 4)),
-            child: Center(
-              child: Image(image: AssetImage(AppImages.corgi)),
+    return Stack(
+      children: [
+        Row(
+          mainAxisSize: MainAxisSize.max,
+          children: <Widget>[
+            _spaceWidthBox(32),
+            Flexible(
+              flex: 3,
+              fit: FlexFit.tight,
+              child: ClipRRect(
+                borderRadius:
+                    BorderRadius.all(Radius.circular(_screenSize.width / 4)),
+                child: Center(
+                  child: Image(image: AssetImage(AppImages.corgi)),
+                ),
+              ),
             ),
-          ),
-        ),
-        _spaceWidthBox(16),
-        Flexible(
-          flex: 7,
-          fit: FlexFit.tight,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Text(
-                "田中 太郎",
-                style: AppStyles.blackBold(20),
-              ),
-              Text(
-                "CEO / 株式会社aaa",
-                style: AppStyles.blackBold(12),
-              ),
-              RichText(
-                text: TextSpan(children: [
-                  WidgetSpan(
-                    child: Icon(
-                      Icons.location_on,
-                      size: 14,
-                    ),
+            _spaceWidthBox(16),
+            Flexible(
+              flex: 7,
+              fit: FlexFit.tight,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Text(
+                    "田中 太郎",
+                    style: AppStyles.blackBold(20),
                   ),
-                  TextSpan(text: "渋谷・東京都", style: AppStyles.greyBold(12))
-                ]),
-              )
-            ],
-          ),
-        ),
+                  Text(
+                    "CEO / 株式会社aaa",
+                    style: AppStyles.blackBold(12),
+                  ),
+                  RichText(
+                    text: TextSpan(children: [
+                      WidgetSpan(
+                        child: Icon(
+                          Icons.location_on,
+                          size: 14,
+                        ),
+                      ),
+                      TextSpan(text: "渋谷・東京都", style: AppStyles.greyBold(12))
+                    ]),
+                  )
+                ],
+              ),
+            ),
+          ],
+        )
       ],
     );
   }
 
   Widget _options() {
     return Container(
-      padding: const EdgeInsets.only(bottom: 10),
+      padding: const EdgeInsets.only(bottom: 10, top: 10),
       decoration: BoxDecoration(
         border: Border(
             top: BorderSide(width: 1, color: Colors.grey),
@@ -176,9 +223,13 @@ class _ProfilePageState extends State<ProfilePage> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          _optionChild("109人が好印象", Icons.tag_faces, _smileHandle()),
+          _optionChild("109人が好印象", Icons.tag_faces, () {
+            _smileHandle();
+          }),
           _spaceWidthBox(16),
-          _optionChild("コメント(15)", Icons.messenger_outline, _starHandle())
+          _optionChild("コメント(15)", Icons.messenger_outline, () {
+            _commentHandle();
+          })
         ],
       ),
     );
@@ -344,5 +395,10 @@ class _ProfilePageState extends State<ProfilePage> {
         )
       ],
     );
+  }
+
+  onCloseModal() {
+    print("dsdsd");
+    Navigator.of(context).pop();
   }
 }

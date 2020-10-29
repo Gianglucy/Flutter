@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_tags/flutter_tags.dart';
+import '../profile/profile.dart';
 
 class MatchingCandidatePage extends StatefulWidget {
   MatchingCandidatePage({Key key, this.title}) : super(key: key);
@@ -250,23 +251,22 @@ class _MatchingCandidatePageState extends State<MatchingCandidatePage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            Text("スキル",
-                style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 18,
-                    color: Colors.black,
-                    fontFamily: "Hiragino Sans")),
-            Padding(
-              padding: const EdgeInsets.only(top: 8),
-              child: _tagCustom(_itemsSkill),
-            ),
             Expanded(
-              flex: 1,
-              child: Container(
-                alignment: Alignment.bottomCenter,
-                child: Text("プロフィール詳細を見る", style: AppStyles.primaryBold(18)),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text("スキル", style: AppStyles.blackBold(18)),
+                  _spaceHeightBox(8),
+                  _tagCustom(_itemsSkill),
+                ],
               ),
-            )
+            ),
+            Container(
+                alignment: Alignment.center,
+                child: GestureDetector(
+                    onTap: onGoToDetailCandidate,
+                    child:
+                        Text("プロフィール詳細を見る", style: AppStyles.primaryBold(18))))
           ],
         ),
       ),
@@ -337,5 +337,17 @@ class _MatchingCandidatePageState extends State<MatchingCandidatePage> {
             ),
           ),
         ));
+  }
+
+  void onGoToDetailCandidate() {
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext contex) {
+        return Container(
+            height: MediaQuery.of(contex).size.height * 0.8,
+            child: ProfilePage(title: "プロフィール", isModal: true));
+      },
+      isScrollControlled: true,
+    );
   }
 }

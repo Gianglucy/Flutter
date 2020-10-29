@@ -8,4 +8,8 @@ class AppColors {
   static var redAccentColor = HexColor('#F27777');
   static var cyantColor = HexColor('#46BEAB');
   static var linesColor = HexColor('#EFEFEF');
+  static var orangeColor = HexColor('#fd9804');
+  static var greenColor = HexColor('#89c048');
+  static var redColor = HexColor('#f44237');
+  static var focusColor = HexColor('#EEEEEE');
 }

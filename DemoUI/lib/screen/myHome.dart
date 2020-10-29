@@ -1,25 +1,14 @@
 import 'package:flutter/painting.dart';
-import 'extend/extendColor.dart';
+import '../extend/extendColor.dart';
 import 'package:flutter/material.dart';
-import 'profile.dart';
-import 'matchingCandidate.dart';
+import 'profile/profile.dart';
+import 'candidate/matchingCandidate.dart';
 
 class MyHome extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
 // run Profile
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Flutter Demo',
-      theme: ThemeData(
-          primaryColor: Colors.white,
-          visualDensity: VisualDensity.adaptivePlatformDensity,
-          appBarTheme: AppBarTheme(elevation: 0)),
-      home: ProfilePage(title: 'プロフィール'),
-    );
-  }
-// run matching
 //    return MaterialApp(
 //      debugShowCheckedModeBanner: false,
 //      title: 'Flutter Demo',
@@ -27,9 +16,20 @@ class MyHome extends StatelessWidget {
 //          primaryColor: Colors.white,
 //          visualDensity: VisualDensity.adaptivePlatformDensity,
 //          appBarTheme: AppBarTheme(elevation: 0)),
-//      home: Home(),
+//      home: ProfilePage(title: 'プロフィール'),
 //    );
 //  }
+// run matching
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      title: 'Flutter Demo',
+      theme: ThemeData(
+          primaryColor: Colors.white,
+          visualDensity: VisualDensity.adaptivePlatformDensity,
+          appBarTheme: AppBarTheme(elevation: 0)),
+      home: Home(),
+    );
+  }
 }
 
 class Home extends StatefulWidget {
