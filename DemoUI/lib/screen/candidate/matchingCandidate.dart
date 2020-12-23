@@ -5,7 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_tags/flutter_tags.dart';
+import 'package:readmore/readmore.dart';
 import '../profile/profile.dart';
+import 'dart:math';
 
 class MatchingCandidatePage extends StatefulWidget {
   MatchingCandidatePage({Key key, this.title}) : super(key: key);
@@ -19,11 +21,47 @@ class MatchingCandidatePage extends StatefulWidget {
   }
 }
 
-class _MatchingCandidatePageState extends State<MatchingCandidatePage> {
+class _MatchingCandidatePageState extends State<MatchingCandidatePage>
+    with TickerProviderStateMixin {
+  AnimationController _rotationController;
+  Animation<double> _animation;
+  AnimationController _controllerText;
+  Animation<double> _animationText;
+
+  @override
+  void initState() {
+    super.initState();
+    _rotationController =
+        AnimationController(vsync: this, duration: Duration(seconds: 2));
+
+    _animation = Tween(begin: 0.0, end: 0.25).animate(_rotationController);
+
+    _controllerText = AnimationController(
+      duration: const Duration(seconds: 3),
+      vsync: this,
+    );
+    _animationText = CurvedAnimation(
+      parent: _controllerText,
+      curve: Curves.fastOutSlowIn,
+    );
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    _rotationController.dispose();
+    _controllerText.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     Size _screenSize = MediaQuery.of(context).size;
     // TODO: implement build
+    // String data =
+    //     "dsdasdasdasdsaddsadsadsadsadsadasdasds";
+    String data =
+        "dsdasdasdasdsaddsadsadsadsadsadasdasds dsdasdasdasdsaddsadsadsadsadsadasdasds dsdasdasdasdsaddsadsadsadsadsadasdasds dsdasdasdasdsaddsadsadsadsadsadasdasds dsdasdasdasdsaddsadsadsadsadsadasdasds dsdasdasdasdsaddsadsadsadsadsadasdasds";
     return Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
@@ -56,16 +94,54 @@ class _MatchingCandidatePageState extends State<MatchingCandidatePage> {
               ),
               onPressed: () {
                 print("====SETTING====");
+                _rotationController.forward();
+                _controllerText.forward();
               },
             ),
           ],
         ),
-        body: Column(
-          children: [
-            _page(),
-            _infoCandidate(),
-          ],
-        ));
+        body: Container(
+            child: ReadMoreText(
+          data,
+          trimLines: 2,
+          trimMode: TrimMode.Line,
+          action: handle,
+          trimCollapsedText: 'Show more',
+          trimExpandedText: 'Show less',
+        ))
+//        Column(
+//          children: [
+//            _page(),
+//            _infoCandidate(),
+//          ],
+//        )
+//            Container(
+//                child: InkWell(
+//          onTap: action,
+//          child: Container(
+//            padding: const EdgeInsets.all(16),
+//            child: Row(
+//              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//              children: [
+//                Expanded(child: Text("ABC")),
+//                RotatedBox(
+//                  quarterTurns: 0,
+//                  child: Icon(Icons.arrow_forward_ios_rounded,
+//                      color: Colors.red, size: 20),
+//                )
+//              ],
+//            ),
+//          ),
+//        ))
+        );
+  }
+
+  handle() {
+    print("sdsadasd");
+  }
+
+  action() {
+    print("afsd");
   }
 
   Widget _spaceWidthBox(double space) {
@@ -117,9 +193,12 @@ class _MatchingCandidatePageState extends State<MatchingCandidatePage> {
   Widget _page() {
     return Container(
       decoration: BoxDecoration(
+          color: AppColors.white,
+          boxShadow: [BoxShadow(color: Colors.grey, blurRadius: 15.0)],
           border: Border(
-              top: BorderSide(width: 1, color: Colors.grey),
-              bottom: BorderSide(width: 1, color: Colors.grey))),
+            top: BorderSide(width: 1, color: Colors.grey),
+//              bottom: BorderSide(width: 1, color: Colors.grey)
+          )),
       padding: const EdgeInsets.symmetric(vertical: 4),
       alignment: Alignment.center,
       child: Text(
